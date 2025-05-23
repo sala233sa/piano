@@ -57,7 +57,7 @@
   #game-area {
     position: relative;
     background: #111;
-    height: 600px;
+    height: 600px; /* Aumentado de 400px a 600px */
     border: 2px solid #444;
     overflow: hidden;
     flex-grow: 1;
@@ -68,8 +68,8 @@
     margin: 10px 0;
   }
   .piano-key {
-    width: 50px;
-    height: 70px;
+    width: 50px; /* Reducido de 60px a 50px */
+    height: 70px; /* Reducido de 80px a 70px */
     background: var(--key-color);
     border-radius: 5px;
     display: flex;
@@ -78,7 +78,7 @@
     user-select: none;
     cursor: default;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 18px; /* Reducido de 20px a 18px */
     color: #eee;
     transition: all 0.2s;
     position: relative;
@@ -98,43 +98,44 @@
   
   .falling-key {
     position: absolute;
-    top: -40px;
-    width: 30px;
-    height: 30px;
+    top: -40px; /* Ajustado para teclas más pequeñas */
+    width: 30px; /* Reducido de 50px a 30px */
+    height: 30px; /* Reducido de 50px a 30px */
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 18px; /* Reducido de 24px a 18px */
     color: white;
     text-align: center;
-    line-height: 30px;
+    line-height: 30px; /* Ajustado para altura reducida */
     font-weight: bold;
     pointer-events: none;
     user-select: none;
     transition: all 0.1s;
     background-color: var(--falling-color);
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    left: 10px;
+    left: 10px; /* Ajustado para centrar mejor */
   }
   
   .falling-key::before {
     content: "▼";
     position: absolute;
-    top: -15px;
+    top: -15px; /* Ajustado para teclas más pequeñas */
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 16px;
+    font-size: 16px; /* Reducido de 20px a 16px */
   }
   
   .falling-key.intense {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    line-height: 40px;
+    width: 40px; /* Reducido de 60px a 40px */
+    height: 40px; /* Reducido de 60px a 40px */
+    font-size: 20px; /* Reducido de 28px a 20px */
+    line-height: 40px; /* Ajustado para altura reducida */
     box-shadow: 0 0 15px gold;
     z-index: 10;
-    left: 5px;
+    left: 5px; /* Ajustado para centrar mejor */
   }
   
+  /* Resto del CSS se mantiene igual */
   #controls-container {
     width: 100%;
     margin-top: 10px;
@@ -255,24 +256,11 @@
   #save-settings:hover {
     background-color: #3e8e41;
   }
-  #high-score {
-    margin-top: 10px;
-    font-size: 18px;
-    text-align: center;
-    color: gold;
-    font-weight: bold;
-  }
-  #song-ended-message {
-    display: none;
-    color: #ff9800;
-    font-weight: bold;
-    margin-top: 10px;
-    text-align: center;
-  }
 </style>
 </head>
 <body>
 
+<!-- El HTML se mantiene igual -->
 <div id="game-container">
 
   <div id="game-screen">
@@ -292,14 +280,6 @@
       <div class="piano-key" data-key="g" id="piano-key-g">G</div>
       <div class="piano-key" data-key="h" id="piano-key-h">H</div>
       <div class="piano-key" data-key="j" id="piano-key-j">J</div>
-    </div>
-
-    <div id="high-score">
-      Mejor Puntuación: <span id="high-score-value">0</span>
-    </div>
-
-    <div id="song-ended-message">
-      ¡Canción terminada! Tu puntuación: <span id="final-score">0</span>
     </div>
 
     <div id="now-playing">
@@ -410,9 +390,6 @@
   const missesDisplay = document.getElementById('misses');
   const gameArea = document.getElementById('game-area');
   const saveSettingsBtn = document.getElementById('save-settings');
-  const highScoreDisplay = document.getElementById('high-score-value');
-  const songEndedMessage = document.getElementById('song-ended-message');
-  const finalScoreDisplay = document.getElementById('final-score');
 
   // Configuración de teclas
   const keys = ['a', 's', 'd', 'f', 'g', 'h', 'j'];
@@ -425,7 +402,6 @@
   let score = 0;
   let hits = 0;
   let misses = 0;
-  let highScore = 0;
   let gameActive = false;
   let gamePaused = false;
   let fallingKeys = [];
@@ -441,20 +417,20 @@
   let beatInterval;
   let lastIntenseBeatTime = 0;
   let isFirstStart = true;
-  let baseSpeed = 2;
-  let speedMultiplier = 1;
+  let baseSpeed = 2; // Velocidad base inicial
+  let speedMultiplier = 1; // Multiplicador de velocidad que aumentará con el tiempo
   let gameStartTime = 0;
 
   // Configuración del juego
   const intenseBeatInterval = 3000;
   const normalBeatInterval = 800;
-  const FALLING_KEY_HEIGHT = 30;
-  const INTENSE_KEY_HEIGHT = 40;
+  const FALLING_KEY_HEIGHT = 30; // Reducido de 50 a 30
+  const INTENSE_KEY_HEIGHT = 40; // Reducido de 60 a 40
   const GAME_AREA_TOP = 0;
-  const SPEED_INCREASE_INTERVAL = 10000;
-  const MAX_SPEED_MULTIPLIER = 3;
+  const SPEED_INCREASE_INTERVAL = 10000; // Aumentar velocidad cada 10 segundos
+  const MAX_SPEED_MULTIPLIER = 3; // Velocidad máxima (3 veces la velocidad base)
 
-  // Cargar configuración y mejor puntuación
+  // Cargar configuración desde localStorage
   function loadSettings() {
     const savedSettings = localStorage.getItem('pianoGameSettings');
     if (savedSettings) {
@@ -471,13 +447,6 @@
       });
       
       document.getElementById('bg-color').value = settings.bgColor;
-    }
-
-    // Cargar mejor puntuación
-    const savedHighScore = localStorage.getItem('pianoGameHighScore');
-    if (savedHighScore) {
-      highScore = parseInt(savedHighScore);
-      highScoreDisplay.textContent = highScore;
     }
   }
 
@@ -498,15 +467,6 @@
     applySettings();
   }
 
-  // Guardar mejor puntuación
-  function saveHighScore() {
-    if (score > highScore) {
-      highScore = score;
-      localStorage.setItem('pianoGameHighScore', highScore.toString());
-      highScoreDisplay.textContent = highScore;
-    }
-  }
-
   // Aplicar configuración de colores
   function applySettings() {
     const bgColor = document.getElementById('bg-color').value;
@@ -520,39 +480,6 @@
       document.documentElement.style.setProperty(`--key-${key}-color`, keyColor);
       document.documentElement.style.setProperty(`--falling-${key}-color`, fallingColor);
     });
-  }
-
-  // Finalizar el juego (por fin de canción o manualmente)
-  function endGame(isSongEnded = false) {
-    if (!gameActive) return;
-    
-    gameActive = false;
-    gamePaused = false;
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-    pauseBtn.textContent = 'Pausar';
-    exitBtn.disabled = true;
-    isFirstStart = true;
-    speedMultiplier = 1;
-
-    saveHighScore();
-
-    if (animationId) cancelAnimationFrame(animationId);
-    if (beatInterval) clearInterval(beatInterval);
-
-    fallingKeys.forEach(k => {
-      if (k.element.parentNode) k.element.parentNode.removeChild(k.element);
-    });
-    fallingKeys = [];
-
-    keys.forEach(k => document.getElementById(`piano-key-${k}`).classList.remove('active'));
-
-    if (isSongEnded) {
-      finalScoreDisplay.textContent = score;
-      songEndedMessage.style.display = 'block';
-    } else {
-      songEndedMessage.style.display = 'none';
-    }
   }
 
   // Inicializar el reproductor de Spotify
@@ -576,14 +503,6 @@
         
         currentTrack = state.track_window.current_track;
         updateNowPlayingUI();
-        
-        // Detectar si la canción terminó (posición = 0 y pausado)
-        if (state.paused && state.position === 0) {
-          if (gameActive) {
-            endGame(true);
-          }
-          return;
-        }
         
         if (state.paused) {
           if (gameActive && !gamePaused) {
@@ -615,7 +534,7 @@
         },
         body: JSON.stringify({
           device_ids: [deviceId],
-          play: false
+          play: false // Iniciar pausado
         })
       });
       
@@ -656,7 +575,7 @@
         },
         body: JSON.stringify({ 
           uris: uris,
-          position_ms: 0
+          position_ms: 0 // Comenzar desde el inicio
         })
       });
 
@@ -804,7 +723,7 @@
     const gameAreaRect = gameArea.getBoundingClientRect();
     const leftPosition = pianoKeyRect.left - gameAreaRect.left;
     
-    keyElement.style.left = `${leftPosition + (pianoKey.offsetWidth - 30) / 2}px`;
+    keyElement.style.left = `${leftPosition + (pianoKey.offsetWidth - 30) / 2}px`; // Ajustado para teclas más pequeñas
     keyElement.dataset.key = randomKey;
 
     gameArea.appendChild(keyElement);
@@ -812,7 +731,7 @@
       element: keyElement,
       key: randomKey,
       y: GAME_AREA_TOP - (isIntense ? INTENSE_KEY_HEIGHT : FALLING_KEY_HEIGHT),
-      speed: (isIntense ? baseSpeed * 1.2 : baseSpeed) * speedMultiplier,
+      speed: (isIntense ? baseSpeed * 1.2 : baseSpeed) * speedMultiplier, // Aplicar multiplicador de velocidad
       isIntense: isIntense,
       missCounted: false
     });
@@ -915,12 +834,12 @@
         const now = Date.now();
         
         // Crear beat normal (solo si no hay muchas flechas en pantalla)
-        if (fallingKeys.length < 10) {
+        if (fallingKeys.length < 10) { // Aumentado el límite de 7 a 10
           createFallingKey();
         }
         
         // Ocasionalmente crear beat intenso (solo si no hay muchas flechas)
-        if (shouldCreateIntenseBeat() && fallingKeys.length < 7) {
+        if (shouldCreateIntenseBeat() && fallingKeys.length < 7) { // Aumentado el límite de 5 a 7
           createFallingKey(true);
           lastIntenseBeatTime = now;
         }
@@ -932,7 +851,7 @@
     if (!gameActive) return;
     
     updateFallingKeys();
-    increaseGameSpeed();
+    increaseGameSpeed(); // Verificar si necesitamos aumentar la velocidad
     animationId = requestAnimationFrame(gameLoop);
   }
 
@@ -1012,9 +931,8 @@
     scoreDisplay.textContent = score;
     hitsDisplay.textContent = hits;
     missesDisplay.textContent = misses;
-    speedMultiplier = 1;
-    gameStartTime = Date.now();
-    songEndedMessage.style.display = 'none';
+    speedMultiplier = 1; // Resetear velocidad al inicio
+    gameStartTime = Date.now(); // Registrar tiempo de inicio
 
     fallingKeys.forEach(k => {
       if (k.element.parentNode) k.element.parentNode.removeChild(k.element);
@@ -1059,18 +977,30 @@
   });
 
   exitBtn.addEventListener('click', () => {
-    endGame();
+    if (!gameActive) return;
+    
+    gameActive = false;
+    gamePaused = false;
+    startBtn.disabled = false;
+    pauseBtn.disabled = true;
+    pauseBtn.textContent = 'Pausar';
+    exitBtn.disabled = true;
+    isFirstStart = true;
+    speedMultiplier = 1; // Resetear velocidad al salir
+
+    if (animationId) cancelAnimationFrame(animationId);
+    if (beatInterval) clearInterval(beatInterval);
+
+    fallingKeys.forEach(k => {
+      if (k.element.parentNode) k.element.parentNode.removeChild(k.element);
+    });
+    fallingKeys = [];
+
+    keys.forEach(k => document.getElementById(`piano-key-${k}`).classList.remove('active'));
   });
 
   // Guardar configuración
   saveSettingsBtn.addEventListener('click', saveSettings);
-
-  // Detectar cuando el usuario cambia de pestaña
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && gameActive && !gamePaused) {
-      pauseGame();
-    }
-  });
 
   // Cargar configuración al iniciar
   window.addEventListener('load', () => {
